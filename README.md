@@ -7,18 +7,25 @@ A modern, full-stack resume builder application with secure authentication, vers
 ### Core Features
 
 - **Secure Authentication**: Email/password login and signup with JWT tokens
-- **Resume Builder**: Comprehensive form with personal details, education, experience, and skills
+- **Resume Builder**: Comprehensive form with personal details, education, experience, skills, and projects
+- **Resume Themes**: Multiple ATS-friendly themes with live preview and selection
 - **Version Tracking**: Save and manage multiple versions of your resume
 - **PDF Export**: Download resumes as professional PDF documents
-- **Dashboard**: Centralized management for all your resumes
+- **Email Sharing**: Send a public resume link with a custom message via email
+- **AI Suggestions (Gemini)**: Grammar fixes and ATS keyword suggestions for summary and projects
+- **Dark/Light Theme**: One-click toggle with persistent preference
+- **Activate/Deactivate**: Toggle resume visibility status
+- **Dashboard**: Centralized management for create, track, update, duplicate, and delete
 
 ### Technical Features
 
 - **Responsive Design**: Works seamlessly on desktop, tablet, and mobile
-- **Modern UI/UX**: Clean, intuitive interface with Material-UI components
-- **Real-time Updates**: Instant preview of resume changes
-- **Data Persistence**: Secure storage with MongoDB
-- **RESTful API**: Well-structured backend API
+- **Modern UI/UX**: Clean, intuitive interface with Material-UI and framer-motion animations
+- **Client + Server Validation**: Inline field errors and backend validation with structured messages
+- **Data Persistence**: Secure storage with MongoDB/Mongoose
+- **RESTful API**: Well-structured backend API with `express-validator`, `helmet`, and rate limiting
+- **Email Service**: `nodemailer` transport for sharing resumes
+- **AI Service**: Gemini via `@google/generative-ai` on a secured backend route
 
 ## 🛠️ Technology Stack
 
@@ -29,6 +36,7 @@ A modern, full-stack resume builder application with secure authentication, vers
 - **React Router** - Client-side routing
 - **Axios** - HTTP client for API calls
 - **React-to-PDF** - PDF generation
+- **framer-motion** - Micro-interactions and animations
 - **Formik & Yup** - Form handling and validation
 
 ### Backend
@@ -40,6 +48,8 @@ A modern, full-stack resume builder application with secure authentication, vers
 - **JWT** - Authentication tokens
 - **bcryptjs** - Password hashing
 - **CORS** - Cross-origin resource sharing
+- **Nodemailer** - Email sending
+- **@google/generative-ai** - Gemini SDK for AI suggestions
 
 ### Development Tools
 
@@ -93,6 +103,9 @@ PORT=5000
 MONGODB_URI=mongodb://localhost:27017/resume-builder
 JWT_SECRET=your-super-secret-jwt-key
 NODE_ENV=development
+# Optional
+FRONTEND_URL=http://localhost:3000
+GEMINI_API_KEY=your-gemini-api-key
 ```
 
 #### Frontend (.env)
@@ -141,16 +154,17 @@ Open your browser and navigate to `http://localhost:3000`
 
 ### 2. Create Resume
 
-- Click "Create New Resume" on the dashboard
-- Fill in your personal details, education, experience, and skills
-- Save your resume
+- Click "Create Resume" on the dashboard
+- Fill in personal details, education, experience, skills, and projects
+- Choose a theme and save; create versions as you iterate
+- Use AI suggestions on Summary and Project descriptions for grammar and ATS keywords
 
 ### 3. Manage Resumes
 
-- View all your resumes on the dashboard
-- Edit existing resumes
-- Create new versions
-- Download as PDF
+- View all resumes on the dashboard (cards with status and version)
+- Edit, duplicate, activate/deactivate, or delete
+- Download as PDF from the preview page
+- Share via email with a public link and a custom message
 
 ### 4. Version Control
 
@@ -244,6 +258,8 @@ resume-builder/
 - `POST /api/auth/register` - User registration
 - `POST /api/auth/login` - User login
 - `GET /api/auth/me` - Get current user
+- `PUT /api/auth/profile` - Update user profile
+- `PUT /api/auth/password` - Change password
 
 ### Resumes
 
@@ -253,6 +269,16 @@ resume-builder/
 - `PUT /api/resumes/:id` - Update resume
 - `DELETE /api/resumes/:id` - Delete resume
 - `GET /api/resumes/:id/versions` - Get resume versions
+- `POST /api/resumes/:id/duplicate` - Duplicate resume
+- `PUT /api/resumes/:id/toggle` - Activate/Deactivate resume
+
+### Email
+
+- `POST /api/email/share-resume` - Send resume link to recipient with message
+
+### AI Suggestions
+
+- `POST /api/ai/suggest` - Get grammar and ATS keyword suggestions (server-side Gemini)
 
 ## 🤝 Contributing
 
@@ -276,13 +302,13 @@ If you encounter any issues or have questions:
 
 ## 🎯 Roadmap
 
-- [ ] Template selection
+- [x] Template selection
 - [ ] Social media integration
-- [ ] Resume sharing
+- [x] Resume sharing (email)
 - [ ] Advanced formatting options
 - [ ] Multi-language support
 - [ ] Resume analytics
-- [ ] AI-powered suggestions
+- [x] AI-powered suggestions (Gemini)
 
 ---
 
