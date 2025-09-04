@@ -30,9 +30,11 @@ import {
 } from "@mui/icons-material";
 import { useParams, useNavigate } from "react-router-dom";
 import { resumeService } from "../services/resumeService";
+import aiService from "../services/aiService";
 import ThemeSelector from "../components/ThemeSelector";
 import { getThemeById } from "../theme/resumeThemes";
 import EmailShareModal from "../components/EmailShareModal";
+import AISuggestionPanel from "../components/AISuggestionPanel";
 
 const steps = [
   "Personal Info",
@@ -79,6 +81,12 @@ const ResumeBuilder = () => {
     certifications: [],
     languages: [],
   });
+
+  // AI suggestion state
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiData, setAiData] = useState(null); // { corrected, keywords, suggestions }
+  const [aiOpen, setAiOpen] = useState(false);
+  const [aiTarget, setAiTarget] = useState(null); // { type: 'summary' | 'project', index?: number }
 
   useEffect(() => {
     if (id && id !== "new") {
@@ -205,6 +213,52 @@ const ResumeBuilder = () => {
 
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
+  };
+
+  // AI helpers
+  const openSuggestions = async ({ text, context, target }) => {
+    try {
+      setAiLoading(true);
+      setAiOpen(true);
+      setAiTarget(target);
+      const res = await aiService.suggest({ text, context });
+      setAiData(res?.data || null);
+    } catch (e) {
+      console.error("AI suggest error", e);
+      setAiData({
+        corrected: "",
+        keywords: [],
+        suggestions: ["AI suggestion failed. Please try again."],
+      });
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const regenerateSuggestions = async () => {
+    if (!aiTarget) return;
+    const { type, index } = aiTarget;
+    const text =
+      type === "summary"
+        ? resume.personalInfo.summary || ""
+        : resume.projects[index]?.description || "";
+    const context =
+      type === "summary"
+        ? "Professional summary for a resume"
+        : `Project description. Title: ${
+            resume.projects[index]?.title || ""
+          }. Tech stack: ${resume.projects[index]?.techStack || ""}.`;
+    await openSuggestions({ text, context, target: aiTarget });
+  };
+
+  const applySuggestion = () => {
+    if (!aiTarget || !aiData?.corrected) return;
+    const { type, index } = aiTarget;
+    if (type === "summary") {
+      updatePersonalInfo({ summary: aiData.corrected });
+    } else if (type === "project") {
+      updateProject(index, { description: aiData.corrected });
+    }
   };
 
   const updateResume = (updates) => {
@@ -558,6 +612,21 @@ const ResumeBuilder = () => {
           error={!!getFieldError("personalInfo.summary")}
           helperText={getFieldError("personalInfo.summary")}
         />
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() =>
+              openSuggestions({
+                text: resume.personalInfo.summary || "",
+                context: "Professional summary for a resume",
+                target: { type: "summary" },
+              })
+            }
+          >
+            Get AI Suggestions
+          </Button>
+        </Box>
       </Grid>
     </Grid>
   );
@@ -943,6 +1012,23 @@ const ResumeBuilder = () => {
                     updateProject(index, { description: e.target.value })
                   }
                 />
+                <Box
+                  sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}
+                >
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    onClick={() =>
+                      openSuggestions({
+                        text: project.description || "",
+                        context: `Project description. Title: ${project.title}. Tech stack: ${project.techStack}.`,
+                        target: { type: "project", index },
+                      })
+                    }
+                  >
+                    Get AI Suggestions
+                  </Button>
+                </Box>
               </Grid>
             </Grid>
           </CardContent>
@@ -1064,8 +1150,21 @@ const ResumeBuilder = () => {
         </Stepper>
       </Paper>
 
-      {/* Content */}
-      <Paper sx={{ p: 3, mb: 3 }}>{getStepContent(activeStep)}</Paper>
+      {/* Content + AI Panel */}
+      <Box sx={{ display: "flex", gap: 2 }}>
+        <Paper sx={{ p: 3, mb: 3, flex: 1 }}>
+          {getStepContent(activeStep)}
+        </Paper>
+        {aiOpen && (
+          <AISuggestionPanel
+            loading={aiLoading}
+            data={aiData}
+            onApply={applySuggestion}
+            onRegenerate={regenerateSuggestions}
+            title="AI Suggestions"
+          />
+        )}
+      </Box>
 
       {/* Navigation */}
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>

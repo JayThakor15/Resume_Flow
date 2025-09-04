@@ -15,6 +15,7 @@ import {
   Avatar,
   LinearProgress,
   Alert,
+  useTheme,
 } from "@mui/material";
 import {
   MoreVert,
@@ -51,6 +52,7 @@ const Dashboard = () => {
   });
 
   const { user } = useAuth();
+  const theme = useTheme();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -189,7 +191,10 @@ const Dashboard = () => {
     <Box
       sx={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)",
+        background:
+          theme.palette.mode === "light"
+            ? "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)"
+            : "linear-gradient(135deg, #0b1220 0%, #0f172a 100%)",
         padding: 3,
       }}
     >

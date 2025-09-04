@@ -50,7 +50,7 @@ const PublicRoute = ({ children }) => {
   return isAuthenticated ? <Navigate to="/dashboard" /> : children;
 };
 
-function AppRoutes() {
+function AppRoutes({ toggleThemeMode, currentThemeMode }) {
   return (
     <Routes>
       {/* Public Routes */}
@@ -76,7 +76,10 @@ function AppRoutes() {
         path="/dashboard"
         element={
           <ProtectedRoute>
-            <Navbar />
+            <Navbar
+              toggleThemeMode={toggleThemeMode}
+              currentThemeMode={currentThemeMode}
+            />
             <Dashboard />
           </ProtectedRoute>
         }
@@ -85,7 +88,10 @@ function AppRoutes() {
         path="/resume/new"
         element={
           <ProtectedRoute>
-            <Navbar />
+            <Navbar
+              toggleThemeMode={toggleThemeMode}
+              currentThemeMode={currentThemeMode}
+            />
             <ResumeBuilder />
           </ProtectedRoute>
         }
@@ -94,7 +100,10 @@ function AppRoutes() {
         path="/resume/:id/edit"
         element={
           <ProtectedRoute>
-            <Navbar />
+            <Navbar
+              toggleThemeMode={toggleThemeMode}
+              currentThemeMode={currentThemeMode}
+            />
             <ResumeBuilder />
           </ProtectedRoute>
         }
@@ -103,7 +112,10 @@ function AppRoutes() {
         path="/resume/:id/preview"
         element={
           <ProtectedRoute>
-            <Navbar />
+            <Navbar
+              toggleThemeMode={toggleThemeMode}
+              currentThemeMode={currentThemeMode}
+            />
             <ResumePreview />
           </ProtectedRoute>
         }
@@ -112,7 +124,10 @@ function AppRoutes() {
         path="/profile"
         element={
           <ProtectedRoute>
-            <Navbar />
+            <Navbar
+              toggleThemeMode={toggleThemeMode}
+              currentThemeMode={currentThemeMode}
+            />
             <Profile />
           </ProtectedRoute>
         }
@@ -125,10 +140,13 @@ function AppRoutes() {
   );
 }
 
-function App() {
+function App({ toggleThemeMode, currentThemeMode }) {
   return (
     <AuthProvider>
-      <AppRoutes />
+      <AppRoutes
+        toggleThemeMode={toggleThemeMode}
+        currentThemeMode={currentThemeMode}
+      />
     </AuthProvider>
   );
 }

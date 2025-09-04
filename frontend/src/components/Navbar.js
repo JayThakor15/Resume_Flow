@@ -27,10 +27,12 @@ import {
   Logout,
   Close,
 } from "@mui/icons-material";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
-const Navbar = () => {
+const Navbar = ({ toggleThemeMode, currentThemeMode }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, logout } = useAuth();
@@ -181,6 +183,21 @@ const Navbar = () => {
                     Create Resume
                   </Button>
                 </motion.div>
+
+                {/* Theme Toggle */}
+                <IconButton
+                  onClick={toggleThemeMode}
+                  sx={{
+                    color: "white",
+                    "&:hover": { background: "rgba(255, 255, 255, 0.1)" },
+                  }}
+                >
+                  {currentThemeMode === "dark" ? (
+                    <LightModeIcon />
+                  ) : (
+                    <DarkModeIcon />
+                  )}
+                </IconButton>
 
                 {/* User Menu */}
                 <motion.div
