@@ -58,8 +58,10 @@ export const isValidEmail = (email) => {
 };
 
 export const isValidPhone = (phone) => {
-  const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-  return phoneRegex.test(phone.replace(/\D/g, ""));
+  if (!phone) return false;
+  const digits = phone.replace(/\D/g, "");
+  // Basic check: allow 7–16 digits
+  return digits.length >= 7 && digits.length <= 16;
 };
 
 export const isValidUrl = (url) => {

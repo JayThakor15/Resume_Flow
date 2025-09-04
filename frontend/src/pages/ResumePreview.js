@@ -262,15 +262,6 @@ const ResumePreview = () => {
     setEmailShareOpen(true);
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-    });
-  };
-
   if (loading) {
     return (
       <Container maxWidth="lg" sx={{ mt: 4 }}>
