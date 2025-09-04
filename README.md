@@ -176,19 +176,19 @@ Open your browser and navigate to `http://localhost:3000`
 
 ### Login Page
 
-![Login Page](screenshots/login.png)
+![Login Page](./frontend/public/Login.png)
 
 ### Dashboard
 
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](./frontend/public/Dashboard.png)
 
 ### Resume Builder
 
-![Resume Builder](screenshots/resume-builder.png)
+![Resume Builder](./frontend/public/Resume%20Builder.png)
 
 ### PDF Preview
 
-![PDF Preview](screenshots/pdf-preview.png)
+![PDF Preview](./frontend/public/Resume-Preview.png)
 
 ## 🚀 Deployment
 

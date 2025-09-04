@@ -123,7 +123,10 @@ const Register = () => {
     <Box
       sx={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        background: (t) =>
+          t.palette.mode === "light"
+            ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+            : "linear-gradient(135deg, #0b1220 0%, #0f172a 100%)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -192,9 +195,9 @@ const Register = () => {
               alignItems: "center",
               width: "100%",
               maxWidth: 500,
-              background: "rgba(255, 255, 255, 0.95)",
+              background: (t) => t.palette.background.paper,
               backdropFilter: "blur(20px)",
-              border: "1px solid rgba(255, 255, 255, 0.2)",
+              border: (t) => `1px solid ${t.palette.divider}`,
               borderRadius: 4,
               position: "relative",
               overflow: "hidden",

@@ -265,9 +265,9 @@ const Navbar = ({ toggleThemeMode, currentThemeMode }) => {
             mt: 1,
             borderRadius: 3,
             boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-            background: "rgba(255, 255, 255, 0.95)",
+            background: (t) => t.palette.background.paper,
             backdropFilter: "blur(10px)",
-            border: "1px solid rgba(255, 255, 255, 0.2)",
+            border: (t) => `1px solid ${t.palette.divider}`,
           },
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
@@ -302,9 +302,9 @@ const Navbar = ({ toggleThemeMode, currentThemeMode }) => {
         PaperProps={{
           sx: {
             width: 280,
-            background: "rgba(255, 255, 255, 0.95)",
+            background: (t) => t.palette.background.paper,
             backdropFilter: "blur(10px)",
-            border: "1px solid rgba(255, 255, 255, 0.2)",
+            border: (t) => `1px solid ${t.palette.divider}`,
           },
         }}
       >
