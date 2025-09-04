@@ -68,6 +68,7 @@ export const AuthProvider = ({ children }) => {
   // Load user on app start
   useEffect(() => {
     let ignore = false;
+
     const loadUser = async () => {
       if (state.token) {
         try {
@@ -84,29 +85,26 @@ export const AuthProvider = ({ children }) => {
           }
         } catch (error) {
           if (!ignore) {
-            // Only dispatch AUTH_FAIL if not already failed
-            if (state.isAuthenticated || state.loading) {
-              dispatch({
-                type: "AUTH_FAIL",
-                payload:
-                  error.response?.data?.message || "Authentication failed",
-              });
-              localStorage.removeItem("token");
-            }
+            dispatch({
+              type: "AUTH_FAIL",
+              payload: error.response?.data?.message || "Authentication failed",
+            });
+            localStorage.removeItem("token");
           }
         }
       } else {
-        // No token present: mark auth as not authenticated and stop loading
         if (!ignore) {
           dispatch({ type: "AUTH_FAIL", payload: null });
         }
       }
     };
+
     loadUser();
+
     return () => {
       ignore = true;
     };
-  }, [state.token, state.isAuthenticated, state.loading]);
+  }, [state.token]); // ✅ only rerun when token changes
 
   // Register user
   const register = async (userData) => {

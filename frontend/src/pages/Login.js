@@ -63,21 +63,28 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    e.stopPropagation();
 
     if (!validateForm()) {
       return;
     }
 
-    setLoading(true);
-    // Don't clear error here - let it be handled by the reducer
+    try {
+      setLoading(true);
+      // Don't clear error here - let it be handled by the reducer
 
-    const result = await login(formData);
-    setLoading(false);
+      const result = await login(formData);
 
-    if (result.success) {
-      navigate("/dashboard");
+      if (result.success) {
+        navigate("/dashboard");
+      }
+      // If not successful, the error will be set in the AuthContext and displayed
+    } catch (error) {
+      console.error("Login submission error:", error);
+      // Error handling is done in AuthContext
+    } finally {
+      setLoading(false);
     }
-    // If not successful, the error will be set in the AuthContext and displayed
   };
 
   const handleTogglePasswordVisibility = () => {
@@ -365,6 +372,14 @@ const Login = () => {
                     mb: 3,
                     height: 48,
                     fontSize: "1.1rem",
+                  }}
+                  onClick={(e) => {
+                    // Additional safeguard
+                    if (loading) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      return false;
+                    }
                   }}
                 >
                   {loading ? (

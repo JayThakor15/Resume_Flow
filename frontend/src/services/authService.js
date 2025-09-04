@@ -1,7 +1,27 @@
 import axios from "axios";
 
-const API_URL =
-  process.env.REACT_APP_API_URL || "https://resume-flow.onrender.com/api";
+// Determine API URL based on environment
+const getApiUrl = () => {
+  // If there's an explicit environment variable, use it
+  if (process.env.REACT_APP_API_URL) {
+    return process.env.REACT_APP_API_URL;
+  }
+
+  // If we're on localhost, use local backend
+  if (
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+  ) {
+    return "http://localhost:5000/api";
+  }
+
+  // Otherwise, use deployed backend
+  return "https://resume-flow.onrender.com/api";
+};
+
+const API_URL = getApiUrl();
+
+console.log("Using API URL:", API_URL); // Debug log
 
 // Create axios instance
 const api = axios.create({

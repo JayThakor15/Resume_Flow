@@ -35,9 +35,9 @@ app.use(limiter);
 app.use(
   cors({
     origin: [
+      "http://localhost:3000",
       "https://resumefloww.netlify.app",
       "https://resume-floww.netlify.app",
-      "http://localhost:3000",
       "http://127.0.0.1:3000",
       process.env.FRONTEND_URL,
     ].filter(Boolean),
