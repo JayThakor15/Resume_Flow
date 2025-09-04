@@ -36,15 +36,13 @@ app.use(
   cors({
     origin: (origin, callback) => {
       const allowList = [
+        "https://resumefloww.netlify.app",
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         process.env.FRONTEND_URL,
-        "https://resumefloww.netlify.app",
-        "https://resumefloww.netlify.app/",
       ].filter(Boolean);
 
-      // Allow same-origin or non-browser clients (no Origin header)
-      if (!origin || allowList.includes(origin)) {
+      if (!origin || allowList.includes(origin.replace(/\/$/, ""))) {
         return callback(null, true);
       }
       return callback(new Error(`CORS blocked: ${origin}`));
