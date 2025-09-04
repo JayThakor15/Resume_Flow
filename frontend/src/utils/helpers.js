@@ -1,7 +1,9 @@
 // Date formatting utilities
 export const formatDate = (date) => {
-  if (!date) return "N/A";
-  return new Date(date).toLocaleDateString();
+  if (!date) return "";
+  const d = new Date(date);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleDateString("en-US", { year: "numeric", month: "short" });
 };
 
 export const formatDateTime = (date) => {

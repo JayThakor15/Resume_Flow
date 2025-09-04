@@ -15,13 +15,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import { resumeService } from "../services/resumeService";
 import generatePDF from "react-to-pdf";
 import { getThemeById } from "../theme/resumeThemes";
+import { formatDate } from "../utils/helpers";
 import EmailShareModal from "../components/EmailShareModal";
 
 const ThemedResume = ({ resume }) => {
   const theme = getThemeById(resume.template || "modern");
   const styles = theme.styles;
 
-  // formatDate is defined and used within ThemedResume above
+  // uses shared formatDate from utils
 
   return (
     <Box>
