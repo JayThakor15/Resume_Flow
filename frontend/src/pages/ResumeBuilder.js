@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Container,
   Paper,
@@ -15,7 +15,6 @@ import {
   IconButton,
   Alert,
   CircularProgress,
-  Divider,
   Chip,
 } from "@mui/material";
 import {
@@ -88,13 +87,7 @@ const ResumeBuilder = () => {
   const [aiOpen, setAiOpen] = useState(false);
   const [aiTarget, setAiTarget] = useState(null); // { type: 'summary' | 'project', index?: number }
 
-  useEffect(() => {
-    if (id && id !== "new") {
-      fetchResume();
-    }
-  }, [id]);
-
-  const fetchResume = async () => {
+  const fetchResume = useCallback(async () => {
     try {
       setLoading(true);
       const response = await resumeService.getResume(id);
@@ -105,7 +98,13 @@ const ResumeBuilder = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    if (id && id !== "new") {
+      fetchResume();
+    }
+  }, [id, fetchResume]);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);

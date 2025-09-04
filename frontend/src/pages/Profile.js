@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Container,
-  Paper,
   Typography,
   TextField,
   Button,
@@ -23,7 +22,6 @@ import {
   Visibility,
   VisibilityOff,
   Save,
-  Cancel,
 } from "@mui/icons-material";
 import { useAuth } from "../contexts/AuthContext";
 

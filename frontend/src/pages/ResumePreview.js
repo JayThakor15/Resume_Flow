@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   Container,
   Paper,
@@ -222,11 +222,7 @@ const ResumePreview = () => {
   const [downloading, setDownloading] = useState(false);
   const resumeRef = useRef();
 
-  useEffect(() => {
-    fetchResume();
-  }, [id]);
-
-  const fetchResume = async () => {
+  const fetchResume = useCallback(async () => {
     try {
       setLoading(true);
       const response = await resumeService.getResume(id);
@@ -238,7 +234,11 @@ const ResumePreview = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchResume();
+  }, [id, fetchResume]);
 
   const handleDownload = async () => {
     try {

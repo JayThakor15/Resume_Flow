@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     loadUser();
-  }, []);
+  }, [state.token]);
 
   // Register user
   const register = async (userData) => {
