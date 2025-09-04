@@ -21,14 +21,7 @@ const ThemedResume = ({ resume }) => {
   const theme = getThemeById(resume.template || "modern");
   const styles = theme.styles;
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-    });
-  };
+  // formatDate is defined and used within ThemedResume above
 
   return (
     <Box>
