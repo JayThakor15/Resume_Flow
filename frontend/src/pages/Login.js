@@ -11,9 +11,7 @@ import {
   CircularProgress,
   InputAdornment,
   IconButton,
-  Snackbar,
 } from "@mui/material";
-const [openSnackbar, setOpenSnackbar] = useState(false);
 import { Visibility, VisibilityOff, Email, Lock } from "@mui/icons-material";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
@@ -29,17 +27,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login, error, clearError } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    clearError();
-  }, [clearError]);
-
-  // Show snackbar when error changes
-  useEffect(() => {
-    if (error) {
-      setOpenSnackbar(true);
-    }
-  }, [error]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -82,7 +69,7 @@ const Login = () => {
     }
 
     setLoading(true);
-    clearError(); // Clear any previous errors
+    // Don't clear error here - let it be handled by the reducer
 
     const result = await login(formData);
     setLoading(false);
@@ -238,23 +225,17 @@ const Login = () => {
               </Typography>
             </motion.div>
 
-            {/* Error Toast */}
-            <Snackbar
-              open={openSnackbar}
-              autoHideDuration={4000}
-              onClose={() => {
-                setOpenSnackbar(false);
-                clearError();
-              }}
-              anchorOrigin={{ vertical: "top", horizontal: "center" }}
-            >
-              {error && (
+            {/* Error Alert - Always visible when there's an error */}
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                style={{ width: "100%", marginBottom: 16 }}
+              >
                 <Alert
                   severity="error"
-                  onClose={() => {
-                    setOpenSnackbar(false);
-                    clearError();
-                  }}
+                  onClose={clearError}
                   sx={{
                     width: "100%",
                     borderRadius: 2,
@@ -266,8 +247,8 @@ const Login = () => {
                 >
                   {error}
                 </Alert>
-              )}
-            </Snackbar>
+              </motion.div>
+            )}
 
             {/* Login Form */}
             <Box
