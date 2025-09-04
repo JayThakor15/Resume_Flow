@@ -104,7 +104,7 @@ export const AuthProvider = ({ children }) => {
     return () => {
       ignore = true;
     };
-  }, [state.token]);
+  }, [state.token, state.isAuthenticated, state.loading]);
 
   // Register user
   const register = async (userData) => {
