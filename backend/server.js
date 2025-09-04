@@ -34,20 +34,15 @@ app.use(limiter);
 // CORS configuration
 app.use(
   cors({
-    origin: (origin, callback) => {
-      const allowList = [
-        "https://resumefloww.netlify.app",
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        process.env.FRONTEND_URL,
-      ].filter(Boolean);
-
-      if (!origin || allowList.includes(origin.replace(/\/$/, ""))) {
-        return callback(null, true);
-      }
-      return callback(new Error(`CORS blocked: ${origin}`));
-    },
+    origin: [
+      "https://resumefloww.netlify.app",
+      "https://resume-floww.netlify.app",
+      "http://localhost:3000",
+      "http://127.0.0.1:3000",
+      process.env.FRONTEND_URL,
+    ].filter(Boolean),
     credentials: true,
+    optionsSuccessStatus: 200,
   })
 );
 

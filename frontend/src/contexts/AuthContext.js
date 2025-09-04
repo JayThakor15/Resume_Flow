@@ -67,31 +67,38 @@ export const AuthProvider = ({ children }) => {
 
   // Load user on app start
   useEffect(() => {
+    let ignore = false;
     const loadUser = async () => {
       if (state.token) {
         try {
           dispatch({ type: "AUTH_START" });
           const response = await authService.getCurrentUser();
-          dispatch({
-            type: "AUTH_SUCCESS",
-            payload: {
-              user: response.data.user,
-              token: state.token,
-            },
-          });
+          if (!ignore) {
+            dispatch({
+              type: "AUTH_SUCCESS",
+              payload: {
+                user: response.data.user,
+                token: state.token,
+              },
+            });
+          }
         } catch (error) {
-          dispatch({
-            type: "AUTH_FAIL",
-            payload: error.response?.data?.message || "Authentication failed",
-          });
-          localStorage.removeItem("token");
+          if (!ignore) {
+            dispatch({
+              type: "AUTH_FAIL",
+              payload: error.response?.data?.message || "Authentication failed",
+            });
+            localStorage.removeItem("token");
+          }
         }
       } else {
-        dispatch({ type: "AUTH_FAIL", payload: null });
+        if (!ignore) dispatch({ type: "AUTH_FAIL", payload: null });
       }
     };
-
     loadUser();
+    return () => {
+      ignore = true;
+    };
   }, [state.token]);
 
   // Register user
