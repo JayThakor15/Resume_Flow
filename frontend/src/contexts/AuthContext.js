@@ -84,15 +84,20 @@ export const AuthProvider = ({ children }) => {
           }
         } catch (error) {
           if (!ignore) {
-            dispatch({
-              type: "AUTH_FAIL",
-              payload: error.response?.data?.message || "Authentication failed",
-            });
-            localStorage.removeItem("token");
+            // Only dispatch AUTH_FAIL if not already failed
+            if (state.isAuthenticated || state.loading) {
+              dispatch({
+                type: "AUTH_FAIL",
+                payload:
+                  error.response?.data?.message || "Authentication failed",
+              });
+              localStorage.removeItem("token");
+            }
           }
         }
       } else {
-        if (!ignore) dispatch({ type: "AUTH_FAIL", payload: null });
+        if (!ignore && state.isAuthenticated)
+          dispatch({ type: "AUTH_FAIL", payload: null });
       }
     };
     loadUser();
