@@ -96,8 +96,10 @@ export const AuthProvider = ({ children }) => {
           }
         }
       } else {
-        if (!ignore && state.isAuthenticated)
+        // No token present: mark auth as not authenticated and stop loading
+        if (!ignore) {
           dispatch({ type: "AUTH_FAIL", payload: null });
+        }
       }
     };
     loadUser();
