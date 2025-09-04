@@ -65,14 +65,9 @@ const Dashboard = () => {
       const response = await resumeService.getResumes();
       console.log("API Response:", response); // Debug log
 
-      // Ensure we always have an array, even if the response structure is different
-      const resumesData = Array.isArray(response.data)
-        ? response.data
-        : Array.isArray(response.data?.data)
-        ? response.data.data
-        : Array.isArray(response.data?.resumes)
-        ? response.data.resumes
-        : [];
+      // The backend returns {success: true, count: X, data: [...]}
+      // So we need to access response.data.data
+      const resumesData = response.data?.data || [];
 
       console.log("Processed resumes data:", resumesData); // Debug log
       setResumes(resumesData);
