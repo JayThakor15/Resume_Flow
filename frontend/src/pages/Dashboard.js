@@ -427,7 +427,16 @@ const Dashboard = () => {
                       >
                         <Typography
                           variant="h6"
-                          sx={{ fontWeight: 600, flex: 1 }}
+                          sx={{
+                            fontWeight: 600,
+                            flex: 1,
+                            color:
+                              theme.palette.mode === "dark" ? "#000000ff" : "#222",
+                            textShadow:
+                              theme.palette.mode === "dark"
+                                ? "0 1px 8px #222, 0 0px 1px #fff"
+                                : "none",
+                          }}
                         >
                           {resume.title}
                         </Typography>
@@ -450,6 +459,20 @@ const Dashboard = () => {
                           label={`v${resume.version}`}
                           variant="outlined"
                           size="small"
+                          sx={{
+                            color:
+                              theme.palette.mode === "dark"
+                                ? "#000000ff"
+                                : "#222",
+                            borderColor:
+                              theme.palette.mode === "dark"
+                                ? "#000000ff"
+                                : "default",
+                            background:
+                              theme.palette.mode === "dark"
+                                ? "rgba(255,255,255,0.08)"
+                                : "inherit",
+                          }}
                         />
                       </Box>
 
